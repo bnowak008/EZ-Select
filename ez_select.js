@@ -48,7 +48,6 @@
 
         select.selectMenuWrap.append(select.selectMenu);
 
-
         select.wrapper.classList.add('ez-select-wrapper', select.options.wrapperClass);
         select.ogList.parentNode.insertBefore(select.wrapper , select.ogList);
     }
@@ -60,7 +59,6 @@
 
         select.selectMenu.addEventListener('touchstart', _clicktouch_selectMenu, false);
         select.selectMenu.addEventListener('mousedown', _clicktouch_selectMenu, false);
-
     }
 
     _clicktouch_selectWrap = function(e) {
@@ -103,9 +101,9 @@
     }
     
     EZ_Select.defaults = {
-        selector : '',
-        tagClass : 'tag',
-        inputId : 'ecp-select'
+        selector : 'testSelect',
+        inputId : 'ez-select-input',
+        wrapperClass : 'ez-select-wrapper'
     }
 
     window.EZ_Select = EZ_Select;
