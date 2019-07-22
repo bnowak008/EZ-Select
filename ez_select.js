@@ -25,6 +25,7 @@
         select.select.classList.add('select');
         select.input.setAttribute('hidden', 'true');
         select.input.setAttribute('id', select.options.inputId);
+        select.input.setAttribute('name', select.options.inputId);
         select.input.setAttribute('value', select.ogList.querySelector("ul > li.selected").getAttribute('data-id'));
 
         select.selectSpan = document.createElement('span');
