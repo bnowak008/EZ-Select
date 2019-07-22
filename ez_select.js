@@ -43,14 +43,13 @@
         select.selectMenu = select.ogList.cloneNode(true);
         select.selectMenu.classList.add('selectMenu', 'collapsed');
         
-        select.ogList.setAttribute('id', select.ogList.getAttribute('id') + '_hid');
         select.ogList.setAttribute('hidden' , 'true');
-        select.ogList.classList.add('selectMenu_hid');
 
         select.selectMenuWrap.append(select.selectMenu);
 
         select.wrapper.classList.add('ez-select-wrapper', select.options.wrapperClass);
         select.ogList.parentNode.insertBefore(select.wrapper , select.ogList);
+        select.ogList.remove();
     }
 
     function addEvents(select){
