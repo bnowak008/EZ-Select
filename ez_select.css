@@ -1,0 +1,106 @@
+/********************* EZ Select Styling *********************/
+.ez-select-wrapper {
+    position: relative;
+    margin-left: .25em;
+}
+
+.ez-select-wrapper .selectWrap {
+    width: 15em;
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 2px #7b7b7b;
+    transition: all .5s ease;
+    position: relative;
+    text-align: left;
+    height: 1.767em;
+}
+
+.ez-select-wrapper .selectWrap .select {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    cursor: pointer;
+    padding-left: .5em;
+    height: 100%;
+}
+
+.ez-select-wrapper .selectWrap .select > span {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: .5px solid #b9b9b9;
+}
+
+.ez-select-wrapper .selectWrap .select > i {
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    float: right;
+    line-height: 22px;
+    margin: 0em .25em;
+}
+
+.ez-select-wrapper .selectWrap:active {
+    background-color: #f8f8f8;
+}
+
+.ez-select-wrapper .selectWrap.active:hover,
+.ez-select-wrapper .selectWrap.active {
+    box-shadow: 0 0 4px rgb(204, 204, 204);
+    border-radius: 3px 3px 0 0;
+    background-color: #f8f8f8;
+}
+
+.ez-select-wrapper .selectWrap.active .select > i {
+    transform: rotate(180deg);
+}
+
+.ez-select-wrapper .selectMenu {
+    position: absolute;
+    background-color: #fff;
+    left: 0;
+    margin-top: 1px;
+    box-shadow: 0 1px 2px rgb(204, 204, 204);
+    border-radius: 0 1px 3px 3px;
+    overflow: hidden;
+    min-width: 15em;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0;
+    list-style: none;
+    z-index: 9;
+    transition: transform 0.3s;
+    transform-origin: top;
+}
+
+.ez-select-wrapper .selectMenu.collapsed {
+    transform: scaleY(0);
+}
+
+.ez-select-wrapper .selectMenu li {
+    padding: .25em .5em;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.ez-select-wrapper .selectMenu li:hover {
+    background-color: #f2f2f2;
+}
+
+.ez-select-wrapper .selectMenu li:active {
+    background-color: #e9e9e9;
+}
+
+.ez-select-wrapper .selectMenu li i,
+.selectWrap .select > span > i {
+    margin-right: .5em;
+}
