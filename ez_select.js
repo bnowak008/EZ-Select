@@ -3,7 +3,6 @@
     var EZ_Select = function(opts){
         this.options = Object.assign(EZ_Select.defaults , opts);
         this.ogList = document.getElementById(opts.selector);
-        this.arr = [];
         this.wrapper = document.createElement('div');
         this.input = document.createElement('input');
         this.clicktouch_selectWrap = _clicktouch_selectWrap;
