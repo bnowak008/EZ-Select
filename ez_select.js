@@ -1,5 +1,7 @@
+
 // ****************** EZ Select ******************//
 (function(){
+
     var EZ_Select = function(opts){
         this.options = Object.assign(EZ_Select.defaults , opts);
         this.ogList = document.getElementById(opts.selector);
@@ -16,7 +18,7 @@
         select.selectWrap = document.createElement('div');
         select.selectWrap.classList.add('selectWrap');
         select.selectWrap.style.width = select.options.width;
-        
+
         select.selectMenuWrap = document.createElement('div');
         select.selectMenuWrap.classList.add('selectMenuWrap');
         select.wrapper.append(select.selectWrap);
@@ -54,71 +56,75 @@
         select.ogList.remove();
     }
 
-    function addEvents(select){
-        select.selectWrap.addEventListener('touchstart', _clicktouch_selectWrap, false);
-        select.selectWrap.addEventListener('mousedown', _clicktouch_selectWrap, false);
-        select.selectWrap.addEventListener('blur', _blur_selectMenu, false);
+    EZ_Select.lastClickedElement = '';
 
-        select.selectMenu.addEventListener('touchstart', _clicktouch_selectMenu, false);
-        select.selectMenu.addEventListener('mousedown', _clicktouch_selectMenu, false);
+    function addEvents(select){
+        select.selectWrap.addEventListener('touchend', _clicktouch_selectWrap, false);
+        select.selectWrap.addEventListener('mouseup', _clicktouch_selectWrap, false);
+        document.addEventListener('mousedown', _clicktouch_document, false);
+
+        select.selectMenu.addEventListener('touchend', _clicktouch_selectMenu, false);
+        select.selectMenu.addEventListener('mouseup', _clicktouch_selectMenu, false);
+
+        select.selectWrap.addEventListener('blur', _blur_selectMenu, false);
     }
 
     _clicktouch_selectWrap = function(e) {
-        if (e.cancelable) { 
-            e.preventDefault();
-            var selectWrap;
-            if (e.target.tagName === 'DIV') {
-                selectWrap = e.target.parentElement;
-            } else {
-                selectWrap = e.target.parentElement.parentElement;
-            }
+        if (!e.cancelable) return;
 
-            var selectMenu = selectWrap.parentElement.lastChild.firstChild;
-
-            selectWrap.setAttribute('tabindex', 1);
-            selectWrap.focus();
-            selectWrap.classList.toggle('active');
-            selectMenu.classList.toggle('collapsed');
+        var selectWrap;
+        if (e.target.tagName === 'DIV') {
+            selectWrap = e.target.parentElement;
+        } else {
+            selectWrap = e.target.parentElement.parentElement;
         }
+
+        var selectMenu = selectWrap.parentElement.lastChild.firstChild;
+
+        selectWrap.setAttribute('tabindex', 1);
+        selectWrap.focus();
+        selectWrap.classList.toggle('active');
+        selectMenu.classList.toggle('collapsed');
     }
 
     _clicktouch_selectMenu  = function(e) {
-        if (e.target.tagName === 'LI') {
-            e.preventDefault();
-            var clickedElement = e.target;
-            var ezSelectWrap = clickedElement.closest('.ez-select-wrapper');
-            var selectWrap = ezSelectWrap.firstChild;
-            var selectMenu = ezSelectWrap.lastChild.firstChild;
-            var select = selectWrap.firstChild;
+        if (e.target.tagName !== 'LI') return;
 
-            select.firstChild.innerHTML = clickedElement.getAttribute('data-displayString');
-            selectWrap.lastChild.setAttribute('value', clickedElement.getAttribute('data-id'));
-            selectWrap.classList.remove('active');
-            selectMenu.classList.add('collapsed');
-        }
+        var clickedElement = e.target;
+        var ezSelectWrap = clickedElement.closest('.ez-select-wrapper');
+        var selectWrap = ezSelectWrap.firstChild;
+        var selectMenu = ezSelectWrap.lastChild.firstChild;
+        var select = selectWrap.firstChild;
+
+        select.firstChild.innerHTML = clickedElement.getAttribute('data-displayString');
+        selectWrap.lastChild.setAttribute('value', clickedElement.getAttribute('data-id'));
+        selectWrap.classList.remove('active');
+        selectMenu.classList.add('collapsed');
     }
 
-    _blur_selectMenu = function(e) {
-        if (!_hasClass(e.target, 'selectWrap')) {
-            var selectWrap = this;
-            var selectMenu = selectWrap.parentElement.lastChild.firstChild;
-
-            selectWrap.classList.remove('active');
-            selectMenu.classList.add('collapsed');
-        }
+    _clicktouch_document = function(e) {
+        EZ_Select.lastClickedElement = e.target;
     }
     
+    _blur_selectMenu = function(e) {
+        if (EZ_Select.lastClickedElement.closest('.ez-select-wrapper') && EZ_Select.lastClickedElement.closest('.ez-select-wrapper') === e.target.closest('.ez-select-wrapper')) return;
+        var selectWrap = this;
+        var selectMenu = selectWrap.parentElement.lastChild.firstChild;
+
+        selectWrap.classList.remove('active');
+        selectMenu.classList.add('collapsed');
+    }
+
     _hasClass = function(elem, className) {
         return elem.className.split(' ').indexOf(className) > -1;
     }
     
     EZ_Select.defaults = {
-        selector : 'testSelect',
-        inputId : 'ez-select-input',
-        wrapperClass : 'ez-select-wrapper',
+        selector : '',
+        tagClass : 'tag',
+        inputId : 'ecp-select',
         width : '15em'
     }
 
     window.EZ_Select = EZ_Select;
-
 })();
