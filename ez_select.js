@@ -15,6 +15,8 @@
     function buildUI(select) {
         select.selectWrap = document.createElement('div');
         select.selectWrap.classList.add('selectWrap');
+        select.selectWrap.style.width = select.options.width;
+        
         select.selectMenuWrap = document.createElement('div');
         select.selectMenuWrap.classList.add('selectMenuWrap');
         select.wrapper.append(select.selectWrap);
@@ -41,6 +43,7 @@
 
         select.selectMenu = select.ogList.cloneNode(true);
         select.selectMenu.classList.add('selectMenu', 'collapsed');
+        select.selectMenu.style.minWidth = select.options.width;
         
         select.ogList.setAttribute('hidden' , 'true');
 
@@ -61,48 +64,59 @@
     }
 
     _clicktouch_selectWrap = function(e) {
-        e.preventDefault();
-        var selectWrap;
-        if (e.target.tagName === 'DIV') {
-            selectWrap = e.target.parentElement;
-        } else {
-            selectWrap = e.target.parentElement.parentElement;
+        if (e.cancelable) { 
+            e.preventDefault();
+            var selectWrap;
+            if (e.target.tagName === 'DIV') {
+                selectWrap = e.target.parentElement;
+            } else {
+                selectWrap = e.target.parentElement.parentElement;
+            }
+
+            var selectMenu = selectWrap.parentElement.lastChild.firstChild;
+
+            selectWrap.setAttribute('tabindex', 1);
+            selectWrap.focus();
+            selectWrap.classList.toggle('active');
+            selectMenu.classList.toggle('collapsed');
         }
-
-        var selectMenu = selectWrap.parentElement.lastChild.firstChild;
-
-        selectWrap.setAttribute('tabindex', 1);
-        selectWrap.focus();
-        selectWrap.classList.toggle('active');
-        selectMenu.classList.toggle('collapsed');
     }
 
     _clicktouch_selectMenu  = function(e) {
-        e.preventDefault();
-        var clickedElement = e.target;
-        var ezSelectWrap = clickedElement.closest('.ez-select-wrapper');
-        var selectWrap = ezSelectWrap.firstChild;
-        var selectMenu = ezSelectWrap.lastChild.firstChild;
-        var select = selectWrap.firstChild;
+        if (e.target.tagName === 'LI') {
+            e.preventDefault();
+            var clickedElement = e.target;
+            var ezSelectWrap = clickedElement.closest('.ez-select-wrapper');
+            var selectWrap = ezSelectWrap.firstChild;
+            var selectMenu = ezSelectWrap.lastChild.firstChild;
+            var select = selectWrap.firstChild;
 
-        select.firstChild.innerHTML = clickedElement.getAttribute('data-displayString');
-        selectWrap.lastChild.setAttribute('value', clickedElement.getAttribute('data-id'));
-        selectWrap.classList.remove('active');
-        selectMenu.classList.add('collapsed');
+            select.firstChild.innerHTML = clickedElement.getAttribute('data-displayString');
+            selectWrap.lastChild.setAttribute('value', clickedElement.getAttribute('data-id'));
+            selectWrap.classList.remove('active');
+            selectMenu.classList.add('collapsed');
+        }
     }
 
     _blur_selectMenu = function(e) {
-        var selectWrap = this;
-        var selectMenu = selectWrap.parentElement.lastChild.firstChild;
+        if (!_hasClass(e.target, 'selectWrap')) {
+            var selectWrap = this;
+            var selectMenu = selectWrap.parentElement.lastChild.firstChild;
 
-        selectWrap.classList.remove('active');
-        selectMenu.classList.add('collapsed');
+            selectWrap.classList.remove('active');
+            selectMenu.classList.add('collapsed');
+        }
+    }
+    
+    _hasClass = function(elem, className) {
+        return elem.className.split(' ').indexOf(className) > -1;
     }
     
     EZ_Select.defaults = {
         selector : 'testSelect',
         inputId : 'ez-select-input',
-        wrapperClass : 'ez-select-wrapper'
+        wrapperClass : 'ez-select-wrapper',
+        width : '15em'
     }
 
     window.EZ_Select = EZ_Select;
